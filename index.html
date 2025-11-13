@@ -114,23 +114,24 @@
         .icon-link:hover { color: #6c757d; } 
 
         /* ---------------------------------------------------- */
-        /* SOLUCIÓN FINAL: DESLIZAMIENTO CON TRANSFORM: TRANSLATEX() */
+        /* SOLUCIÓN AL PROBLEMA DE DESPLAZAMIENTO MÓVIL (OVERFLOW) */
         /* ---------------------------------------------------- */
         .social-icons-container {
-            /* Mantiene la posición right:8px de las clases tailwind (bottom-2 right-2) 
-               pero usa transform para empujarlo fuera del área visible. */
-            transform: translateX(120%); 
+            /* POSICIÓN DE OCULTACIÓN SEGURA: 
+               Mover el contenedor de iconos fuera del área visible de la tarjeta 
+               usando 'right' negativo, lo cual no causa overflow global. */
+            right: -6rem; 
             opacity: 0;
             
-            /* Transición para el deslizamiento (transform) y la aparición (opacity) */
-            transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.3s ease-in;
+            /* Transición para el deslizamiento (cambio de 'right') y la aparición (opacity) */
+            transition: right 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.3s ease-in;
             
             pointer-events: none; 
         }
 
         .concejal-card:hover .social-icons-container {
-            /* Al hacer hover, se desliza a su posición original (translateX(0)) */
-            transform: translateX(0); 
+            /* Al hacer hover, se desliza a su posición final (right-2 = 0.5rem) */
+            right: 0.5rem; 
             opacity: 1;
             pointer-events: auto; 
         }
