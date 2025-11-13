@@ -77,6 +77,34 @@
         }
         /* ---------------------------------------------------- */
 
+        /* ---------------------------------------------------- */
+        /* NUEVO: ESTILOS DE HOVER PARA NAVEGACIÓN DE ESCRITORIO */
+        /* ---------------------------------------------------- */
+        .nav-link-desktop {
+            position: relative; /* Necesario para el pseudo-elemento */
+            padding-bottom: 4px; /* Espacio para el borde inferior */
+            transition: color 0.3s ease;
+        }
+
+        /* Pseudo-elemento para el subrayado animado */
+        .nav-link-desktop::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%; /* Empezar en el centro */
+            width: 0; /* Ancho inicial cero */
+            height: 2px;
+            background-color: white; 
+            transition: width 0.3s ease-in-out, left 0.3s ease-in-out;
+        }
+
+        /* Al pasar el ratón: Expandir el borde y centrarlo */
+        .nav-link-desktop:hover::after {
+            width: 100%;
+            left: 0;
+        }
+        /* ---------------------------------------------------- */
+
 
         /* ---------------------------------------------------- */
         /* ESTILOS CLAVE PARA EL EFECTO DESLIZANTE CON "EMPUJE" */
@@ -170,17 +198,27 @@
 
         <!-- Navegación (Desktop) -->
         <nav class="hidden md:flex space-x-6 text-white">
-            <a href="#concejales" class="hover:text-gray-200 font-medium transition duration-300 border-b-2 border-white pb-1">Concejales</a>
-            <a href="https://www.facebook.com/RondaSomos" target="_blank" class="hover:text-gray-200 font-medium transition duration-300">Noticias</a>
-            <!-- ENLACE DE CONTACTO RESTAURADO: Desplazamiento a la sección de email -->
-            <a href="#contacto-seccion" class="hover:text-gray-200 font-medium transition duration-300">Contacto</a>
+            <!-- APLICADA NUEVA CLASE PARA EL EFECTO HOVER -->
+            <a href="#concejales" class="nav-link-desktop font-medium transition duration-300">Concejales</a>
+            <a href="https://www.facebook.com/RondaSomos" target="_blank" class="nav-link-desktop font-medium transition duration-300">Noticias</a>
+            <a href="#contacto-seccion" class="nav-link-desktop font-medium transition duration-300">Contacto</a>
         </nav>
         
-        <!-- Menú móvil (Placeholder) -->
-        <button onclick="mostrarMensaje('La función de menú móvil desplegable no está implementada en esta demostración.')" class="md:hidden p-2 rounded-full hover:bg-red-700 transition duration-300">
+        <!-- Menú móvil (Botón) -->
+        <button onclick="toggleMenu()" class="md:hidden p-2 rounded-full hover:bg-red-700 transition duration-300">
             <i data-lucide="menu" class="w-6 h-6 text-white"></i>
         </button>
     </div>
+
+    <!-- Menú Desplegable Móvil -->
+    <nav id="mobile-menu" class="hidden md:hidden w-full bg-red-700 shadow-inner">
+        <div class="flex flex-col text-center py-2 space-y-2">
+            <!-- Los enlaces llaman a closeMenu() después de la navegación -->
+            <a href="#concejales" onclick="closeMenu()" class="block py-2 text-white hover:bg-red-800 transition duration-300 font-semibold">Concejales</a>
+            <a href="https://www.facebook.com/RondaSomos" target="_blank" onclick="closeMenu()" class="block py-2 text-white hover:bg-red-800 transition duration-300 font-semibold">Noticias</a>
+            <a href="#contacto-seccion" onclick="closeMenu()" class="block py-2 text-white hover:bg-red-800 transition duration-300 font-semibold">Contacto</a>
+        </div>
+    </nav>
 </header>
 
 <!-- Sección de Héroe/Presentación -->
@@ -438,10 +476,23 @@
 
 <!-- Scripts de Interacción -->
 <script>
-    // Inicialización de iconos de Lucide (DEBE EJECUTARSE DESPUÉS DE LA INSERCIÓN DE ICONOS)
-    
     // Obtener el div para los mensajes (simulando alertas)
     const messageBox = document.getElementById('messageBox');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    /**
+     * Alterna la visibilidad del menú móvil.
+     */
+    function toggleMenu() {
+        mobileMenu.classList.toggle('hidden');
+    }
+    
+    /**
+     * Cierra el menú móvil. Llamado al hacer clic en un enlace de navegación.
+     */
+    function closeMenu() {
+        mobileMenu.classList.add('hidden');
+    }
 
     /**
      * Muestra un mensaje temporal en la esquina inferior derecha.
@@ -506,7 +557,6 @@
     }
 
     // Inicialización de iconos de Lucide después de que el DOM esté cargado
-    // Este script se mantiene al final para asegurar que los elementos estén en el DOM.
     window.onload = function() {
         lucide.createIcons();
     };
