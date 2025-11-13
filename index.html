@@ -50,6 +50,8 @@
             background-color: #f7f7f7; 
             /* Espacio superior para el header fijo (h-20 = 5rem) */
             padding-top: 5rem; 
+            /* FIX DEFINITIVO 1: Ocultar cualquier desplazamiento horizontal en el body */
+            overflow-x: hidden; 
         }
         /* Estilo base para el color del partido (Rojo) */
         .color-principal {
@@ -127,6 +129,13 @@
             transition: right 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.3s ease-in;
             
             pointer-events: none; 
+        }
+        
+        /* FIX DEFINITIVO 2: Desactivar completamente los iconos en dispositivos móviles (< 768px) */
+        @media (max-width: 767px) {
+            .social-icons-container {
+                display: none !important; /* El uso de !important asegura que se aplica en móvil */
+            }
         }
 
         .concejal-card:hover .social-icons-container {
