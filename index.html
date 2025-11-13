@@ -205,7 +205,8 @@
         </nav>
         
         <!-- Menú móvil (Botón) -->
-        <button onclick="toggleMenu()" class="md:hidden p-2 rounded-full hover:bg-red-700 transition duration-300">
+        <!-- ********* AÑADIDO ID para referencia en JS ********* -->
+        <button id="menu-toggle-button" onclick="toggleMenu()" class="md:hidden p-2 rounded-full hover:bg-red-700 transition duration-300">
             <i data-lucide="menu" class="w-6 h-6 text-white"></i>
         </button>
     </div>
@@ -479,20 +480,42 @@
     // Obtener el div para los mensajes (simulando alertas)
     const messageBox = document.getElementById('messageBox');
     const mobileMenu = document.getElementById('mobile-menu');
+    // Referencia al botón del menú hamburguesa por su nuevo ID
+    const menuToggleBtn = document.getElementById('menu-toggle-button'); 
+
+    let isMenuOpen = false; // Estado del menú
 
     /**
      * Alterna la visibilidad del menú móvil.
      */
     function toggleMenu() {
-        mobileMenu.classList.toggle('hidden');
+        isMenuOpen = !isMenuOpen; // Cambia el estado
+        if (isMenuOpen) {
+            mobileMenu.classList.remove('hidden');
+        } else {
+            mobileMenu.classList.add('hidden');
+        }
     }
     
     /**
-     * Cierra el menú móvil. Llamado al hacer clic en un enlace de navegación.
+     * Cierra el menú móvil. Llamado al hacer clic en un enlace de navegación o al hacer clic fuera.
      */
     function closeMenu() {
+        isMenuOpen = false;
         mobileMenu.classList.add('hidden');
     }
+    
+    // NUEVA FUNCIONALIDAD: Cerrar el menú al hacer clic fuera de él.
+    document.addEventListener('click', function(event) {
+        // Solo proceder si el menú está abierto
+        if (!isMenuOpen) return;
+
+        // Comprobar si el clic NO es dentro del menú (mobileMenu)
+        // Y tampoco es en el botón de alternancia (menuToggleBtn)
+        if (!mobileMenu.contains(event.target) && !menuToggleBtn.contains(event.target)) {
+            closeMenu();
+        }
+    });
 
     /**
      * Muestra un mensaje temporal en la esquina inferior derecha.
