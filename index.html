@@ -30,6 +30,17 @@
         }
 
         /* ---------------------------------------------------- */
+        /* ESTILO CLAVE: CORRECCIÓN PARA ENCABEZADO FIJO */
+        /* ---------------------------------------------------- */
+        #contacto-seccion {
+            /* Asegura que al hacer scroll al ID, el contenido se detenga 
+               6rem por debajo del borde superior, evitando que el header fijo (h-20 = 5rem) lo tape. */
+            scroll-margin-top: 6rem; 
+        }
+        /* ---------------------------------------------------- */
+
+
+        /* ---------------------------------------------------- */
         /* ESTILOS CLAVE PARA EL EFECTO DESLIZANTE CON "EMPUJE" */
         /* ---------------------------------------------------- */
 
@@ -70,12 +81,30 @@
         }
 
         /* Colores de hover para los iconos de redes sociales */
-        .icon-whatsapp:hover { color: #25D366; } 
-        .icon-telegram:hover { color: #0088CC; } 
-        .icon-x:hover { color: #000000; } 
-        .icon-facebook:hover { color: #1877F2; } 
-        .icon-email:hover { color: #D44638; } 
         .icon-link:hover { color: #6c757d; } 
+
+        /* ---------------------------------------------------- */
+        /* SOLUCIÓN FINAL: DESLIZAMIENTO CON TRANSFORM: TRANSLATEX() */
+        /* ---------------------------------------------------- */
+        .social-icons-container {
+            /* Mantiene la posición right:8px de las clases tailwind (bottom-2 right-2) 
+               pero usa transform para empujarlo fuera del área visible. */
+            transform: translateX(120%); 
+            opacity: 0;
+            
+            /* Transición para el deslizamiento (transform) y la aparición (opacity) */
+            transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), opacity 0.3s ease-in;
+            
+            pointer-events: none; 
+        }
+
+        .concejal-card:hover .social-icons-container {
+            /* Al hacer hover, se desliza a su posición original (translateX(0)) */
+            transform: translateX(0); 
+            opacity: 1;
+            pointer-events: auto; 
+        }
+        /* ---------------------------------------------------- */
     </style>
 </head>
 <body> 
@@ -99,11 +128,12 @@
         <nav class="hidden md:flex space-x-6 text-white">
             <a href="#concejales" class="hover:text-gray-200 font-medium transition duration-300 border-b-2 border-white pb-1">Concejales</a>
             <a href="https://www.facebook.com/RondaSomos" target="_blank" class="hover:text-gray-200 font-medium transition duration-300">Noticias</a>
-            <a href="contacto.html" class="hover:text-gray-200 font-medium transition duration-300">Contacto</a>
+            <!-- ENLACE DE CONTACTO RESTAURADO: Desplazamiento a la sección de email -->
+            <a href="#contacto-seccion" class="hover:text-gray-200 font-medium transition duration-300">Contacto</a>
         </nav>
         
         <!-- Menú móvil (Placeholder) -->
-        <button onclick="mostrarMensaje('Función de menú móvil no implementada en este demo.')" class="md:hidden p-2 rounded-full hover:bg-red-700 transition duration-300">
+        <button onclick="mostrarMensaje('La función de menú móvil desplegable no está implementada en esta demostración.')" class="md:hidden p-2 rounded-full hover:bg-red-700 transition duration-300">
             <i data-lucide="menu" class="w-6 h-6 text-white"></i>
         </button>
     </div>
@@ -138,74 +168,104 @@
             <!-- Listado de Concejales (Generado por JS) -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                 <script>
+                    const defaultEmail = "grupomunicipalsocialistar@gmail.com";
+                    
+                    // DATOS DE CONCEJALES ACTUALIZADOS CON ENLACES DE REDES SOCIALES (X, Facebook, Instagram)
                     const concejales = [
                         { 
                             nombre: "Francisco Cañestro", 
                             photoUrl: "https://i.imgur.com/FDLCBU8.jpeg",
-                            portavoz: true,
-                            email: "contacto.gms@ronda.es", 
+                            cargo: "Portavoz Principal", 
+                            email: defaultEmail, 
                             areas: ["Portavocía Principal", "Urbanismo y Vivienda"],
+                            twitter: "", 
+                            // ENLACES ACTUALIZADOS:
+                            facebook: "https://www.facebook.com/francisco.canestro", 
+                            instagram: "https://www.instagram.com/franciscocanestro/" 
                         },
                         { 
                             nombre: "Fátima Fernández", 
                             photoUrl: "https://i.imgur.com/8DUWHMe.jpeg",
-                            portavoz: false,
-                            email: "contacto.gms@ronda.es", 
-                            // Áreas de Fátima: Obras y Urbanismo, Vivienda, Bienestar Animal, Medioambiente
+                            cargo: "Portavoz Adjunta", 
+                            email: defaultEmail, 
                             areas: ["Obras y Urbanismo", "Vivienda", "Bienestar Animal", "Medioambiente"],
+                            twitter: "", 
+                            // ENLACE DE FACEBOOK ACTUALIZADO:
+                            facebook: "https://www.facebook.com/profile.php?id=61561067585212", 
+                            instagram: "" // A rellenar
                         },
                         { 
                             nombre: "Pepi Cabrera", 
                             photoUrl: "https://i.imgur.com/kJ2sgKW.jpeg",
-                            portavoz: false,
-                            email: "contacto.gms@ronda.es", 
-                            // Áreas de Pepi
+                            cargo: "Concejal/a", 
+                            email: defaultEmail, 
                             areas: ["Bienestar Social", "Educación", "Salud"],
+                            twitter: "", 
+                            // ENLACE DE FACEBOOK ACTUALIZADO:
+                            facebook: "https://www.facebook.com/pepachika", 
+                            instagram: "" 
                         },
                         { 
                             nombre: "Juankar González", 
                             photoUrl: "https://i.imgur.com/JkTgW5N.jpeg",
-                            portavoz: false,
-                            // EMAIL ACTUALIZADO
+                            cargo: "Concejal/a", 
                             email: "juancarlosgonzalezruiz73@gmail.com", 
-                            // Áreas de Juankar: Cultura y Patrimonio, Sanidad, Turismo
                             areas: ["Cultura y Patrimonio", "Sanidad", "Turismo"],
+                            // Enlaces de Juankar González
+                            twitter: "https://x.com/JuankarGonzalez", 
+                            // ENLACE DE FACEBOOK ACTUALIZADO:
+                            facebook: "https://www.facebook.com/profile.php?id=61581432370539", 
+                            // ENLACE DE INSTAGRAM ACTUALIZADO:
+                            instagram: "https://www.instagram.com/juankar.gonzalez/" 
                         },
                         { 
                             nombre: "Nerea Marín", 
                             photoUrl: "https://i.imgur.com/P6HTyqK.jpeg",
-                            portavoz: false,
-                            email: "contacto.gms@ronda.es", 
-                            // Áreas de Nerea: Infancia y Juventud, Igualdad, Servicios Sociales
+                            cargo: "Concejal/a", 
+                            email: defaultEmail, 
                             areas: ["Infancia y Juventud", "Igualdad", "Servicios Sociales"],
+                            // Enlaces de Nerea Marín
+                            twitter: "",
+                            facebook: "https://www.facebook.com/nerea.mariinjimeenez",
+                            instagram: "https://www.instagram.com/nereamj_00/" // <-- ENLACE DE INSTAGRAM AÑADIDO
                         },
                         { 
                             nombre: "Yolanda Ríos", 
                             photoUrl: "https://i.imgur.com/8o9Gdb8.jpeg",
-                            portavoz: false,
-                            email: "contacto.gms@ronda.es", 
-                            // Áreas de Yolanda Ríos
+                            cargo: "Concejal/a", 
+                            email: defaultEmail, 
                             areas: ["Parques y Jardines", "Fiestas"],
+                            twitter: "",
+                            facebook: "",
+                            instagram: "" // A rellenar
                         },
                         { 
                             nombre: "María del Mar Lobato", 
                             photoUrl: "https://i.imgur.com/hkOY3B4.jpeg",
-                            portavoz: false,
-                            email: "contacto.gms@ronda.es", 
-                            // Áreas de María del Mar Lobato: Mayores, Participación Ciudadana
+                            cargo: "Concejal/a", 
+                            email: defaultEmail, 
                             areas: ["Mayores", "Participación Ciudadana"],
+                            twitter: "",
+                            // Enlaces de María del Mar Lobato
+                            facebook: "https://www.facebook.com/mariadelmar.lobato.7", // <-- ENLACE DE FACEBOOK AÑADIDO
+                            instagram: "" 
                         },
                         { 
                             nombre: "Rafa Domínguez", 
                             photoUrl: "https://i.imgur.com/jRsueSG.jpeg",
-                            portavoz: false,
-                            email: "contacto.gms@ronda.es", 
-                            // Áreas de Rafa Domínguez: Economía y Hacienda, Deporte
+                            cargo: "Concejal/a", 
+                            email: defaultEmail, 
                             areas: ["Economía y Hacienda", "Deporte"],
+                            twitter: "",
+                            // ACTUALIZADO: Añadidas Facebook e Instagram
+                            facebook: "https://www.facebook.com/profile.php?id=100006254328313", // <-- ENLACE DE FACEBOOK ACTUALIZADO
+                            instagram: "" // <-- Instagram vacío para ocultar el icono
                         },
                     ];
 
                     const concejalesContainer = document.querySelector('.grid.grid-cols-1');
+
+                    concejalesContainer.innerHTML = ''; // Limpiamos el contenedor para evitar duplicados
 
                     concejales.forEach(concejal => {
                         const card = document.createElement('div');
@@ -213,30 +273,63 @@
                         
                         // Placeholder si la foto falla
                         const photoPlaceholder = `https://placehold.co/400x500/e00000/ffffff?text=${encodeURIComponent(concejal.nombre.split(' ')[0])}%0A${encodeURIComponent(concejal.nombre.split(' ').slice(1).join(' '))}&font=inter&font-size=36`;
+                        
+                        // Generación dinámica de iconos de redes sociales
+                        let socialIconsHTML = '';
+                        
+                        // 1. Icono de X (antes Twitter)
+                        if (concejal.twitter && concejal.twitter.trim() !== '') {
+                            socialIconsHTML += `
+                                <a href="${concejal.twitter}" target="_blank" title="X (Twitter) de ${concejal.nombre}" 
+                                   class="text-gray-500 hover:text-gray-900 transition-colors duration-200">
+                                    <i data-lucide="x" class="w-6 h-6"></i>
+                                </a>
+                            `;
+                        }
+                        
+                        // 2. Icono de Facebook
+                        // Muestra el icono si el campo de Facebook no está vacío.
+                        if (concejal.facebook && concejal.facebook.trim() !== '') {
+                            socialIconsHTML += `
+                                <a href="${concejal.facebook}" target="_blank" title="Facebook de ${concejal.nombre}" 
+                                   class="text-gray-500 hover:text-blue-700 transition-colors duration-200">
+                                    <i data-lucide="facebook" class="w-6 h-6"></i>
+                                </a>
+                            `;
+                        }
+
+                        // 3. Icono de Instagram (NUEVO)
+                        if (concejal.instagram && concejal.instagram.trim() !== '') {
+                            socialIconsHTML += `
+                                <a href="${concejal.instagram}" target="_blank" title="Instagram de ${concejal.nombre}" 
+                                   class="text-gray-500 hover:text-pink-600 transition-colors duration-200">
+                                    <i data-lucide="instagram" class="w-6 h-6"></i>
+                                </a>
+                            `;
+                        }
 
                         // Estructura de la tarjeta:
-                        // 1. Foto
-                        // 2. Nombre y Portavocía
-                        // 3. Email (Nuevo lugar)
-                        // 4. Título de Áreas de Enfoque (Nuevo lugar, con divisor)
-                        // 5. Listado de Áreas
                         card.innerHTML = `
-                            <img src="${concejal.photoUrl}" alt="Foto de ${concejal.nombre}" 
-                                class="w-full object-cover object-top border-b-4 border-red-500"
-                                style="height: 320px;"
-                                onerror="this.onerror=null; this.src='${photoPlaceholder}'; this.style.objectFit='contain'; this.style.paddingTop='1rem'; this.style.backgroundColor='#e00000';"
-                            >
+                            <!-- IMPORTANTE: Añadida la clase 'overflow-hidden' al contenedor relativo para recortar los iconos al deslizarse -->
+                            <div class="relative overflow-hidden">
+                                <img src="${concejal.photoUrl}" alt="Foto de ${concejal.nombre}" 
+                                    class="w-full object-cover object-top border-b-4 border-red-500"
+                                    style="height: 320px;"
+                                    onerror="this.onerror=null; this.src='${photoPlaceholder}'; this.style.objectFit='contain'; this.style.paddingTop='1rem'; this.style.backgroundColor='#e00000';"
+                                >
+                                <!-- Contenedor de iconos flotante en la esquina inferior derecha de la imagen -->
+                                <div class="social-icons-container absolute bottom-2 right-2 p-2 bg-white/80 backdrop-blur-sm rounded-lg shadow-lg flex space-x-2">
+                                    ${socialIconsHTML}
+                                </div>
+                            </div>
                             <div class="p-6 text-center">
                                 <h3 class="text-xl font-bold text-gray-900 mb-1">${concejal.nombre}</h3>
-                                ${concejal.portavoz ? `<p class="text-sm text-color-principal font-semibold mb-3">Portavoz del Grupo</p>` : `<p class="text-sm text-gray-400 mb-3">&nbsp;</p>`}
+                                
+                                <!-- Se muestra el cargo si existe, si no, se deja un espacio -->
+                                ${concejal.cargo ? `<p class="text-sm ${concejal.cargo.includes('Portavoz') ? 'text-color-principal font-semibold' : 'text-gray-500'} mb-3">${concejal.cargo}</p>` : `<p class="text-sm text-gray-400 mb-3">&nbsp;</p>`}
                                 
                                 <div class="text-left text-sm text-gray-600 space-y-2 mt-4">
-                                    <!-- Email (Movido arriba) -->
-                                    <div class="flex items-center pb-2">
-                                        <i data-lucide="mail" class="w-4 h-4 mr-2 text-red-500"></i>
-                                        <a href="mailto:${concejal.email}" class="hover:text-red-700 transition">${concejal.email}</a>
-                                    </div>
-
+                                    
                                     <!-- Título de Áreas de Enfoque (con divisor visual) -->
                                     <h4 class="text-base font-semibold text-gray-800 pt-3 border-t border-gray-200">Áreas de Enfoque:</h4>
                                     
@@ -252,42 +345,28 @@
         </div>
     </section>
 
-    <!-- Sección de Llamada a la Acción -->
-    <section class="bg-gray-100 py-12 md:py-16">
+    <!-- Sección de Contacto Directo y Llamada a la Acción (MODIFICADA) -->
+    <!-- ID AÑADIDO PARA PERMITIR EL SCROLL DESDE LA NAVEGACIÓN -->
+    <section id="contacto-seccion" class="bg-gray-100 py-12 md:py-16">
         <div class="container mx-auto px-4 text-center">
-            <h3 class="text-2xl font-bold text-gray-800 mb-6">Comparte la información y contacta</h3>
+            
+            <!-- Bloque de Email y Texto solicitado -->
+            <h3 class="text-3xl font-extrabold text-gray-800 mb-2">Contacta con el Grupo Municipal Socialista</h3>
+            
+            <div class="inline-flex items-center justify-center p-4 bg-white rounded-xl shadow-md border-b-4 border-red-500 mb-8 mt-4">
+                <i data-lucide="mail" class="w-6 h-6 mr-3 text-color-principal"></i>
+                <!-- Nuevo Email del Grupo Municipal -->
+                <span id="groupEmailDisplay" class="text-lg sm:text-xl font-semibold text-gray-800">grupomunicipalsocialistar@gmail.com</span>
+                <button onclick="copyEmailFromDisplay()" title="Copiar Email" class="ml-4 p-2 rounded-full text-gray-500 hover:bg-gray-200 transition duration-200">
+                    <i data-lucide="copy" class="w-5 h-5"></i>
+                </button>
+            </div>
+            
+            <!-- Título de "Comparte" y botón de enlace solamente -->
+            <h4 class="text-2xl font-bold text-gray-800 mb-6">Comparte</h4>
             
             <div class="flex flex-wrap justify-center gap-4 mb-8">
-                <!-- Botones de Redes Sociales/Compartir -->
-                <button onclick="share('whatsapp')" title="Compartir en WhatsApp" 
-                        class="p-3 rounded-full bg-gray-200 hover:bg-white text-gray-600 hover:text-green-600 transition-all duration-300 transform hover:scale-110 flex items-center justify-center w-12 h-12">
-                    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" class="icon-whatsapp">
-                        <path d="M12.04 2c-5.45 0-9.91 4.46-9.91 9.91 0 1.75.52 3.4.95 4.14l-1.12 4.12 4.2-1.09c.67.38 1.41.59 2.18.59h.03c5.44 0 9.91-4.46 9.91-9.91 0-5.45-4.47-9.91-9.91-9.91zm.04 18.06c-1.66 0-3.23-.48-4.59-1.3l-.32-.19-3.35.87.89-3.26-.21-.33c-.87-1.42-1.37-3.07-1.37-4.83 0-4.5 3.7-8.19 8.24-8.19s8.24 3.7 8.24 8.24c0 4.54-3.7 8.19-8.24 8.19zm4.52-6.16c-.25-.12-.86-.42-.99-.47-.13-.05-.28-.05-.4-.05-.12 0-.46.19-.59.33-.13.14-.3.31-.38.4-.08.09-.16.19-.32.12-.16-.08-.68-.25-1.29-.8-.47-.42-.79-.94-.89-1.11-.1-.17-.01-.25.07-.33.07-.07.16-.18.23-.27.06-.08.06-.15.04-.25-.02-.1-.08-.26-.12-.33-.06-.08-.13-.07-.2-.07-.07 0-.15-.02-.23-.02-.08 0-.2-.05-.3-.12-.1-.07-.38-.28-.5-.38-.13-.1-.2-.17-.3-.17-.12 0-.25.02-.34.02-.08.02-.21.07-.33.19-.12.1-.46.46-.46 1.12 0 .66.47 1.3 1.09 1.49.62.19 1.29.33 1.38.38.08.05.62.95 1.77 1.54 1.16.59 1.4.52 1.66.47.25-.05.86-.35.99-.69.13-.34.13-.64.09-.72-.05-.07-.16-.12-.3-.19z"/>
-                    </svg>
-                </button>
-                
-                <button onclick="share('telegram')" title="Compartir en Telegram" 
-                        class="p-3 rounded-full bg-gray-200 hover:bg-white text-gray-600 hover:text-blue-500 transition-all duration-300 transform hover:scale-110 flex items-center justify-center w-12 h-12">
-                    <i data-lucide="send" class="w-6 h-6 icon-telegram"></i>
-                </button>
-                
-                <button onclick="share('x')" title="Visitar X (Twitter)" 
-                        class="p-3 rounded-full bg-gray-200 hover:bg-white text-gray-600 hover:text-black transition-all duration-300 transform hover:scale-110 flex items-center justify-center w-12 h-12">
-                    <i data-lucide="x" class="w-6 h-6 icon-x"></i>
-                </button>
-                
-                <button onclick="share('facebook')" title="Visitar Facebook" 
-                        class="p-3 rounded-full bg-gray-200 hover:bg-white text-gray-600 hover:text-blue-700 transition-all duration-300 transform hover:scale-110 flex items-center justify-center w-12 h-12">
-                    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" class="icon-facebook">
-                        <path d="M12 2C6.477 2 2 6.477 2 12c0 4.991 3.657 9.127 8.438 9.879V14.89h-2.404v-2.85h2.404v-2.126c0-2.37 1.439-3.669 3.568-3.669 1.025 0 1.918.077 2.179.111v2.53h-1.503c-1.185 0-1.428.562-1.428 1.39v1.83h2.802l-.454 2.85h-2.348v6.989C18.343 21.127 22 16.991 22 12c0-5.523-4.477-10-10-10z"/>
-                    </svg>
-                </button>
-                
-                <button onclick="openEmailModal()" title="Contactar por Email" 
-                        class="p-3 rounded-full bg-gray-200 hover:bg-white text-gray-600 hover:text-red-600 transition-all duration-300 transform hover:scale-110 flex items-center justify-center w-12 h-12">
-                    <i data-lucide="mail" class="w-6 h-6 icon-email"></i>
-                </button>
-                
+                <!-- Botón de Copiar Enlace de la Página -->
                 <button onclick="copyLink()" title="Copiar Enlace de la Página" 
                         class="p-3 rounded-full bg-gray-200 hover:bg-white text-gray-600 hover:text-gray-900 transition-all duration-300 transform hover:scale-110 flex items-center justify-center w-12 h-12">
                     <i data-lucide="link" class="w-6 h-6 icon-link"></i>
@@ -299,21 +378,6 @@
             </p>
         </div>
     </section>
-
-    <!-- Modal de Email -->
-    <div id="emailModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full text-center relative">
-            <button onclick="closeEmailModal()" class="absolute top-3 right-3 text-gray-500 hover:text-gray-800">
-                <i data-lucide="x" class="w-6 h-6"></i>
-            </button>
-            <h3 class="text-xl font-bold text-gray-800 mb-4">Dirección de Contacto</h3>
-            <p class="text-gray-600 mb-4">Puedes contactarnos directamente en:</p>
-            <p id="emailToCopy" class="text-lg font-semibold text-color-principal mb-4">contacto.gms@ronda.es</p>
-            <button onclick="copyEmailToClipboard()" class="color-principal text-white py-2 px-4 rounded-lg hover:bg-red-700 transition">
-                Copiar Email
-            </button>
-        </div>
-    </div>
 
     <!-- Caja de mensajes flotante (para mensajes de interacción) -->
     <div id="messageBox" class="fixed bottom-4 right-4 bg-green-600 text-white p-3 rounded-lg shadow-xl transition-opacity duration-300 opacity-0 z-50"></div>
@@ -330,12 +394,10 @@
 
 <!-- Scripts de Interacción -->
 <script>
-    // Inicialización de iconos de Lucide
-    lucide.createIcons();
+    // Inicialización de iconos de Lucide (DEBE EJECUTARSE DESPUÉS DE LA INSERCIÓN DE ICONOS)
     
     // Obtener el div para los mensajes (simulando alertas)
     const messageBox = document.getElementById('messageBox');
-    const emailModal = document.getElementById('emailModal');
 
     /**
      * Muestra un mensaje temporal en la esquina inferior derecha.
@@ -362,40 +424,6 @@
     }
 
     /**
-     * Función para compartir en redes sociales o copiar el enlace.
-     * @param {string} platform - La plataforma a compartir ('whatsapp', 'telegram', 'x', 'facebook', 'email', 'link')
-     */
-    function share(platform) {
-        const url = window.location.href; 
-        let shareUrl = '';
-
-        switch (platform) {
-            case 'whatsapp':
-                shareUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent('Conoce al Grupo Municipal Socialista de Ronda: ' + url)}`;
-                break;
-            case 'telegram':
-                shareUrl = `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent('Conoce al Grupo Municipal Socialista de Ronda')}`;
-                break;
-            case 'x':
-                shareUrl = `https://x.com/`; 
-                break;
-            case 'facebook':
-                shareUrl = `https://www.facebook.com/`; 
-                break;
-            case 'email':
-                openEmailModal(); 
-                return;
-            case 'link':
-                copyLink(); 
-                return;
-            default:
-                return;
-        }
-
-        window.open(shareUrl, '_blank');
-    }
-
-    /**
      * Copia la URL actual al portapapeles.
      */
     function copyLink() {
@@ -414,30 +442,11 @@
     }
 
     /**
-     * Abre el modal de email.
+     * Copia la dirección de email del display principal al portapapeles.
      */
-    function openEmailModal() {
-        emailModal.classList.remove('hidden');
-        emailModal.classList.add('flex');
-        
-        // El email a copiar en el modal es el genérico del grupo. 
-        // Si se quisiera poner el del concejal, habría que cambiar la lógica de este modal.
-        document.getElementById('emailToCopy').textContent = 'contacto.gms@ronda.es';
-    }
-
-    /**
-     * Cierra el modal de email.
-     */
-    function closeEmailModal() {
-        emailModal.classList.add('hidden');
-        emailModal.classList.remove('flex');
-    }
-
-    /**
-     * Copia la dirección de email al portapapeles.
-     */
-    function copyEmailToClipboard() {
-        const emailAddress = document.getElementById('emailToCopy').textContent;
+    function copyEmailFromDisplay() {
+        // La dirección de email se obtiene del elemento span con el ID groupEmailDisplay
+        const emailAddress = document.getElementById('groupEmailDisplay').textContent;
         try {
             const tempInput = document.createElement('input');
             tempInput.value = emailAddress;
@@ -446,12 +455,17 @@
             document.execCommand('copy');
             document.body.removeChild(tempInput);
             mostrarMensaje('¡Dirección de correo copiada!');
-            closeEmailModal();
         } catch (err) {
             console.error('Fallback: Error al copiar el correo: ', err);
             mostrarMensaje('No se pudo copiar el correo. Inténtalo manualmente.', 'error');
         }
     }
+
+    // Inicialización de iconos de Lucide después de que el DOM esté cargado
+    // Este script se mantiene al final para asegurar que los elementos estén en el DOM.
+    window.onload = function() {
+        lucide.createIcons();
+    };
 </script>
 </body>
 </html>
