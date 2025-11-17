@@ -309,14 +309,14 @@
                 <script>
                     const defaultEmail = "grupomunicipalsocialistar@gmail.com";
                     
-                    // DATOS DE CONCEJALES ACTUALIZADOS CON ENLACES DE REDES SOCIALES (X, Facebook, Instagram)
+                    // DATOS DE CONCEJALES ACTUALIZADOS: Pepi Cabrera ahora incluye "Empleo" en sus áreas.
                     const concejales = [
                         { 
                             nombre: "Francisco Cañestro", 
                             photoUrl: "https://imgur.com/tFnPJav.jpeg",
-                            cargo: "Portavoz Principal", 
+                            cargo: "Portavoz", /* ACTUALIZADO: Portavoz */
                             email: defaultEmail, 
-                            areas: ["Portavocía Principal", "Urbanismo y Vivienda"],
+                            customRole: "Coordinador del Grupo Municipal Socialista", /* Rol personalizado */
                             twitter: "", 
                             facebook: "https://www.facebook.com/francisco.canestro", 
                             instagram: "https://www.instagram.com/franciscocanestro/" 
@@ -336,7 +336,7 @@
                             photoUrl: "https://i.imgur.com/kJ2sgKW.jpeg",
                             cargo: "Concejal/a", 
                             email: defaultEmail, 
-                            areas: ["Bienestar Social", "Educación", "Salud"],
+                            areas: ["Bienestar Social", "Educación", "Salud", "Empleo"], /* ACTUALIZADO: Añadido Empleo */
                             twitter: "", 
                             facebook: "https://www.facebook.com/pepachika", 
                             instagram: "" 
@@ -437,6 +437,38 @@
                             `;
                         }
 
+                        // --- LÓGICA DE ÁREAS / ROL PERSONALIZADO ---
+                        let areasContentHTML = '';
+
+                        if (concejal.customRole) {
+                            // Lógica específica para Francisco Cañestro (rol personalizado)
+                            areasContentHTML = `
+                                <div class="text-left text-sm text-gray-600 space-y-2 mt-4">
+                                    <!-- Se mantiene el separador (border-t) -->
+                                    <div class="pt-3 border-t border-gray-200"></div>
+                                    
+                                    <!-- Se añade el rol personalizado con icono de check verde -->
+                                    <div class="flex items-center text-gray-800 font-semibold mt-2">
+                                        <i data-lucide="check-circle" class="w-4 h-4 mr-2 text-green-500"></i>
+                                        ${concejal.customRole}
+                                    </div>
+                                </div>
+                            `;
+                        } else {
+                            // Lógica para el resto de concejales (Áreas de Enfoque estándar)
+                            areasContentHTML = `
+                                <div class="text-left text-sm text-gray-600 space-y-2 mt-4">
+                                                        
+                                    <!-- Título de Áreas de Enfoque (con divisor visual) -->
+                                    <h4 class="text-base font-semibold text-gray-800 pt-3 border-t border-gray-200">Áreas de Enfoque:</h4>
+                                    
+                                    <!-- Listado de Áreas con icono de check verde -->
+                                    ${concejal.areas.map(area => `<div class="flex items-center"><i data-lucide="check-circle" class="w-4 h-4 mr-2 text-green-500"></i>${area}</div>`).join('')}
+                                </div>
+                            `;
+                        }
+                        // --- FIN LÓGICA DE ÁREAS / ROL PERSONALIZADO ---
+
                         // Estructura de la tarjeta:
                         card.innerHTML = `
                             <div class="relative overflow-hidden">
@@ -455,14 +487,8 @@
                                 
                                 ${concejal.cargo ? `<p class="text-sm ${concejal.cargo.includes('Portavoz') ? 'text-color-principal font-semibold' : 'text-gray-500'} mb-3">${concejal.cargo}</p>` : `<p class="text-sm text-gray-400 mb-3">&nbsp;</p>`}
                                 
-                                <div class="text-left text-sm text-gray-600 space-y-2 mt-4">
-                                    
-                                    <!-- Título de Áreas de Enfoque (con divisor visual) -->
-                                    <h4 class="text-base font-semibold text-gray-800 pt-3 border-t border-gray-200">Áreas de Enfoque:</h4>
-                                    
-                                    <!-- Listado de Áreas con icono de check verde -->
-                                    ${concejal.areas.map(area => `<div class="flex items-center"><i data-lucide="check-circle" class="w-4 h-4 mr-2 text-green-500"></i>${area}</div>`).join('')}
-                                </div>
+                                <!-- Inyectar el contenido de áreas/rol -->
+                                ${areasContentHTML}
                             </div>
                         `;
                         concejalesContainer.appendChild(card);
