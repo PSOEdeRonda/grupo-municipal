@@ -76,7 +76,8 @@
         /* ---------------------------------------------------- */
         /* CORRECCIÓN PARA ENCABEZADO FIJO (scroll-margin-top) */
         /* ---------------------------------------------------- */
-        #contacto-seccion {
+        /* Se actualiza para incluir la nueva sección de Campañas y Mociones */
+        #contacto-seccion, #campanas-seccion, #mociones-seccion {
             scroll-margin-top: 6rem; 
         }
         
@@ -209,6 +210,16 @@
         /* ---------------------------------------------------- */
         /* SE ELIMINARON LOS ESTILOS DE POSICIONAMIENTO FIJO PARA EL BOTÓN DE SCROLL */
         /* ---------------------------------------------------- */
+        
+        /* Estilos específicos para la tarjeta de campaña */
+        .campaign-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        .campaign-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
     </style>
 </head>
 <body> 
@@ -236,13 +247,17 @@
                 <h1 class="text-xs sm:text-lg font-extrabold text-white uppercase tracking-tight">
                     GRUPO MUNICIPAL SOCIALISTA
                 </h1>
-                <span class="block text-white font-semibold text-xs sm:text-lg -mt-1">AYUNTAMIENTO DE RONDA</span>
+                <!-- MODIFICADO: Tamaño del texto reducido de sm:text-lg a sm:text-sm -->
+                <span class="block text-white font-semibold text-xs sm:text-sm -mt-1">AYUNTAMIENTO DE RONDA</span>
             </div>
         </div>
 
         <!-- Navegación (Desktop) -->
         <nav class="hidden md:flex space-x-6 text-white">
-            <a href="#concejales" class="nav-link-desktop font-medium transition duration-300">Concejales</a>
+            <!-- NUEVO: Enlace a Campañas -->
+            <a href="#campanas-seccion" class="nav-link-desktop font-medium transition duration-300">Campañas</a> 
+            <!-- NUEVO: Enlace a Mociones -->
+            <a href="#mociones-seccion" class="nav-link-desktop font-medium transition duration-300">Mociones</a> 
             <a href="https://www.facebook.com/RondaSomos" target="_blank" class="nav-link-desktop font-medium transition duration-300">Noticias</a>
             <a href="#contacto-seccion" class="nav-link-desktop font-medium transition duration-300">Contacto</a>
         </nav>
@@ -256,10 +271,17 @@
     <!-- Menú Desplegable Móvil (Opción 1 aplicada) -->
     <nav id="mobile-menu" class="hidden md:hidden w-full bg-red-700 shadow-inner">
         <div class="flex flex-col text-left py-2 space-y-2">
-            <!-- Concejales -->
-            <a href="#concejales" onclick="closeMenu()" class="flex items-center space-x-3 py-2 px-6 text-white hover:bg-red-800 transition duration-300 font-semibold">
-                <i data-lucide="users" class="w-5 h-5"></i>
-                <span>Concejales</span>
+            
+            <!-- NUEVO: Enlace a Campañas Móvil -->
+            <a href="#campanas-seccion" onclick="closeMenu()" class="flex items-center space-x-3 py-2 px-6 text-white hover:bg-red-800 transition duration-300 font-semibold">
+                <i data-lucide="megaphone" class="w-5 h-5"></i>
+                <span>Campañas</span>
+            </a>
+            
+            <!-- NUEVO: Enlace a Mociones Móvil -->
+            <a href="#mociones-seccion" onclick="closeMenu()" class="flex items-center space-x-3 py-2 px-6 text-white hover:bg-red-800 transition duration-300 font-semibold">
+                <i data-lucide="file-text" class="w-5 h-5"></i>
+                <span>Mociones</span>
             </a>
             
             <!-- Noticias (con enlace externo) -->
@@ -309,7 +331,7 @@
                 <script>
                     const defaultEmail = "grupomunicipalsocialistar@gmail.com";
                     
-                    // DATOS DE CONCEJALES ACTUALIZADOS: Pepi Cabrera ahora incluye "Empleo" en sus áreas.
+                    // DATOS DE CONCEJALES: Se eliminó el enlace de concejales y se actualizó el contenido.
                     const concejales = [
                         { 
                             nombre: "Francisco Cañestro", 
@@ -498,6 +520,143 @@
         </div>
     </section>
 
+    <!-- INICIO: Script de Datos de Actividades (Mociones y Campañas) -->
+    <script>
+        // DATOS DE CAMPAÑAS Y MOCIONES - AÑADIDO EL CAMPO 'TIPO'
+        const actividades = [
+            {
+                title: "Ronda PIERDE los Exámenes de Conducir",
+                description: "La alcaldesa (PP) se niega a invertir los 25.000€ necesarios. La DGT se irá de la ciudad.",
+                url: "https://psoederonda.github.io/examenes-carnet/",
+                imageUrl: "https://i.imgur.com/OfVwDiR.jpeg", 
+                icon: "car",
+                area: "Tráfico",
+                tipo: "Campaña" 
+            },
+            {
+                title: "Ronda es su Comarca, el PP nos da la espalda.",
+                description: "Decimos NO a la Zona Naranja. Decimos NO a convertir a nuestr@s vecin@s de la Serranía en ciudadan@s de segunda.",
+                url: "https://psoederonda.github.io/zona-naranja/",
+                imageUrl: "https://i.imgur.com/7cL4rmN.jpeg", 
+                icon: "traffic-cone",
+                area: "Comarca",
+                tipo: "Campaña" 
+            },
+            {
+                title: "PLAN MUNICIPAL DE SALUD MENTAL JUVENIL",
+                description: "Una respuesta urgente y estructural a la crisis de salud mental que afecta a nuestra juventud.",
+                url: "https://psoederonda.github.io/moci-n-salud-mental-ronda/",
+                imageUrl: "https://i.imgur.com/tR0WFOv.jpeg", 
+                icon: "brain-circuit",
+                area: "Sanidad",
+                tipo: "Moción" // Este irá a la nueva sección de Mociones
+            }
+        ];
+
+        /**
+         * Función genérica para renderizar tarjetas en un contenedor específico.
+         */
+        function renderActividades(actividades, containerId, targetType) {
+            const container = document.getElementById(containerId);
+            if (!container) return; // Asegura que el contenedor exista
+
+            // Filtra solo las actividades del tipo deseado (Campaña o Moción)
+            const filteredActividades = actividades.filter(actividad => actividad.tipo === targetType);
+            
+            container.innerHTML = ''; 
+
+            filteredActividades.forEach(actividad => {
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-xl overflow-hidden campaign-card flex flex-col';
+                
+                // Lógica para determinar el color de la etiqueta de Tipo
+                let tipoColorClass = '';
+                if (actividad.tipo === 'Moción') {
+                    // Fondo más suave para Mociones
+                    tipoColorClass = 'bg-red-100 text-red-700'; 
+                } else {
+                    // Fondo para Campañas
+                    tipoColorClass = 'bg-gray-200 text-gray-700'; 
+                }
+
+                // Estructura de la tarjeta
+                card.innerHTML = `
+                    <!-- Imagen de la Actividad -->
+                    <div class="h-48 overflow-hidden relative">
+                        <img src="${actividad.imageUrl}" alt="Imagen de la actividad: ${actividad.title}" 
+                            class="w-full h-full object-cover"
+                            onerror="this.onerror=null; this.src='https://placehold.co/800x450/e00000/ffffff?text=Imagen%20No%20Disponible'; this.style.objectFit='contain'; this.style.padding='1rem';"
+                        >
+                        <!-- Etiqueta de TIPO (Moción/Campaña) -->
+                        <span class="absolute top-3 right-3 px-3 py-1 text-xs font-bold uppercase rounded-full shadow-md ${tipoColorClass}">
+                            ${actividad.tipo}
+                        </span>
+                    </div>
+                    
+                    <!-- Contenido de la Campaña -->
+                    <div class="p-6 flex flex-col flex-grow">
+                        <div class="flex items-center text-color-principal mb-2">
+                            <i data-lucide="${actividad.icon || 'megaphone'}" class="w-5 h-5 mr-2"></i>
+                            <!-- Muestra el área temática -->
+                            <span class="text-sm font-semibold uppercase tracking-wider">${actividad.area || 'Propuesta'}</span>
+                        </div>
+                        <h3 class="text-xl font-extrabold text-gray-900 mb-3 leading-tight">${actividad.title}</h3>
+                        <p class="text-gray-600 mb-4 flex-grow">${actividad.description}</p>
+                        
+                        <!-- Botón de Enlace -->
+                        <a href="${actividad.url}" target="_blank" 
+                           class="mt-4 inline-flex items-center justify-center color-principal text-white px-5 py-2 rounded-lg font-semibold interactive-button-pop shadow-md hover:bg-red-700 transition duration-300">
+                            Saber más
+                            <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                        </a>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+    </script>
+    <!-- FIN: Script de Datos de Actividades (Mociones y Campañas) -->
+
+    <!-- NUEVA SECCIÓN DE CAMPAÑAS -->
+    <section id="campanas-seccion" class="py-12 md:py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-10 md:mb-16">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-800 uppercase mb-3">
+                    Últimas Campañas de Concienciación
+                </h2>
+                <p class="text-gray-600 max-w-3xl mx-auto text-lg">
+                    Conoce las campañas de concienciación que el Grupo Socialista ha iniciado para abordar problemas y promover soluciones en Ronda.
+                </p>
+            </div>
+            
+            <!-- Contenedor de Campañas (Solo tipo: "Campaña") -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="campanas-container">
+                <!-- El contenido se inyecta por JS -->
+            </div>
+        </div>
+    </section>
+    <!-- FIN NUEVA SECCIÓN DE CAMPAÑAS -->
+
+    <!-- NUEVA SECCIÓN DE MOCIONES -->
+    <section id="mociones-seccion" class="py-12 md:py-20 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-10 md:mb-16">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-800 uppercase mb-3">
+                    Propuestas y Mociones al Pleno
+                </h2>
+                <p class="text-gray-600 max-w-3xl mx-auto text-lg">
+                    Las principales propuestas y mociones que el Grupo Socialista ha llevado recientemente al pleno del Ayuntamiento de Ronda.
+                </p>
+            </div>
+            
+            <!-- Contenedor de Mociones (Solo tipo: "Moción") -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="mociones-container">
+                <!-- El contenido se inyecta por JS -->
+            </div>
+        </div>
+    </section>
+    <!-- FIN NUEVA SECCIÓN DE MOCIONES -->
+
     <!-- Sección de Contacto Directo y Llamada a la Acción -->
     <section id="contacto-seccion" class="bg-gray-100 py-12 md:py-16">
         <div class="container mx-auto px-4 text-center">
@@ -512,7 +671,7 @@
                 <!-- BOTÓN DE COPIAR: APLICADA CLASE interactive-button-pop -->
                 <button onclick="copyEmailFromDisplay()" title="Copiar Email" 
                         class="ml-4 p-2 rounded-full text-gray-500 hover:bg-gray-200 interactive-button-pop">
-                    <i data-lucide="copy" class="w-5 h-5"></i>
+                    <i data-lucide="copy" class="w-5 h-6"></i>
                 </button>
             </div>
             
@@ -532,15 +691,7 @@
                 Mantente informado y participa activamente en la vida política de Ronda.
             </p>
 
-            <!-- ****************************************************** -->
-            <!-- BOTÓN "VOLVER ARRIBA" INTEGRADO EN EL FLUJO DEL DOCUMENTO -->
-            <!-- ****************************************************** -->
-            <button id="scroll-to-top-btn" onclick="scrollToTop()"
-                class="inline-flex items-center color-principal text-white px-6 py-3 rounded-full shadow-xl hover:bg-red-700 interactive-button-pop text-lg font-semibold transform transition-transform duration-300 hover:scale-[1.02]">
-                <i data-lucide="chevron-up" class="w-6 h-6 mr-2"></i>
-                Volver Arriba
-            </button>
-            <!-- ****************************************************** -->
+            <!-- ELIMINADO: BOTÓN "VOLVER ARRIBA" INTEGRADO EN EL FLUJO DEL DOCUMENTO -->
 
         </div>
     </section>
@@ -557,6 +708,14 @@
         <p class="mt-2">Trabajando por el futuro de Ronda.</p>
     </div>
 </footer>
+
+<!-- BOTÓN FLOTANTE "VOLVER ARRIBA" -->
+<button id="scroll-to-top-btn" onclick="scrollToTop()"
+    class="fixed bottom-6 right-6 z-50 p-4 color-principal text-white rounded-full shadow-2xl 
+           opacity-0 transition-opacity duration-300 transform scale-100 hover:scale-105 interactive-button-pop"
+    title="Volver Arriba">
+    <i data-lucide="chevron-up" class="w-6 h-6"></i>
+</button>
 
 <!-- Scripts de Interacción -->
 <script>
@@ -666,20 +825,30 @@
      * Desplaza la página hasta arriba usando un comportamiento suave.
      */
     function scrollToTop() {
-        // En este caso, queremos ir al principio del cuerpo del documento, no al top:0
-        // Podríamos usar: document.getElementById('concejales').scrollIntoView(); 
-        // Pero para "Volver Arriba", ir al top de la página es el comportamiento esperado.
         window.scrollTo({
             top: 0,
             behavior: 'smooth'
         });
     }
 
-    // ELIMINADA: La lógica window.onscroll para mostrar/ocultar el botón, 
-    // ya que ahora está integrado y siempre visible en la sección.
+    /**
+     * Muestra o oculta el botón de scroll al tope basado en la posición.
+     * NUEVA FUNCIÓN para el botón flotante.
+     */
+    function handleScroll() {
+        const scrollTopBtn = document.getElementById('scroll-to-top-btn');
+        // Mostrar el botón si el scroll vertical es mayor a 300px (después del hero)
+        if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+            scrollTopBtn.classList.add('opacity-100');
+            scrollTopBtn.classList.remove('opacity-0');
+        } else {
+            scrollTopBtn.classList.remove('opacity-100');
+            scrollTopBtn.classList.add('opacity-0');
+        }
+    }
     
     // ******************************************************
-    // LÓGICA DE CARGA (Opción 3)
+    // LÓGICA DE CARGA Y RENDERIZADO PRINCIPAL
     // ******************************************************
     window.onload = function() {
         // 1. Inicializa los iconos de Lucide
@@ -690,8 +859,14 @@
             loadingOverlay.classList.add('fade-out-loader');
         }, 300);
         
-        // Asigna la función scrollToTop al objeto global (para que funcione desde el onclick)
-        window.scrollToTop = scrollToTop;
+        // 3. Renderiza las nuevas secciones separadas
+        renderActividades(actividades, 'campanas-container', 'Campaña');
+        renderActividades(actividades, 'mociones-container', 'Moción');
+
+        // 4. Añade el listener de scroll para el botón flotante
+        window.addEventListener('scroll', handleScroll);
+        // Establecer el estado inicial del botón flotante
+        handleScroll();
     };
 </script>
 </body>
