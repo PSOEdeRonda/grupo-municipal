@@ -633,6 +633,32 @@
             
             <!-- Contenedor de Ágoras (MODIFICADO para centrado y lista vertical) -->
             <div class="flex flex-col items-center space-y-8" id="agoras-container">
+                <div class="bg-white rounded-xl overflow-hidden campaign-card flex flex-col w-full max-w-4xl mx-auto">
+    <!-- Imagen del Ágora -->
+    <div class="h-48 overflow-hidden relative">
+        <img src="https://i.imgur.com/lG732lU.jpeg" alt="Imagen de Ágora: El Desafío de la Vivienda Asequible en Ronda" 
+            class="w-full h-full object-cover"
+            onerror="this.onerror=null; this.src='https://placehold.co/800x450/0056b3/ffffff?text=Ágora+Vivienda'; this.style.objectFit='contain'; this.style.padding='1rem';"
+        >
+    </div>
+    
+<!-- Contenido del Ágora -->
+    <div class="p-6 flex flex-col flex-grow">
+        <div class="flex items-center text-color-principal mb-2">
+            <i data-lucide="home" class="w-5 h-5 mr-2"></i>
+            <span class="text-sm font-semibold uppercase tracking-wider">VIVIENDA</span>
+        </div>
+        <h3 class="text-xl font-extrabold text-gray-900 mb-3 leading-tight">El Desafío de la Vivienda Asequible en Ronda</h3>
+        <p class="text-gray-600 mb-4 flex-grow">Análisis y propuestas para crear un parque de vivienda social y asequible para los jóvenes y familias rondeñas.</p>
+        
+        <!-- Botón de Enlace -->
+        <a href="https://psoederonda.github.io/vivienda/" target="_blank" 
+           class="mt-4 inline-flex items-center justify-center color-principal text-white px-5 py-2 rounded-lg font-semibold interactive-button-pop shadow-md hover:bg-red-700 transition duration-300">
+            Ver     Debate
+            <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+        </a>
+    </div>
+</div>
                 <!-- El contenido se inyecta por JS -->
             </div>
         </div>
@@ -748,63 +774,7 @@
     const loadingOverlay = document.getElementById('loading-overlay'); 
 
     let isMenuOpen = false; // Estado del menú
-// DATOS DE ÁGORAS - ÚNICO CONTENIDO CONSERVADO
-const agoras = [
-    {
-        title: "El Desafío de la Vivienda Asequible en Ronda",
-        description: "Análisis y propuestas para crear un parque de vivienda social y asequible para los jóvenes y familias rondeñas.",
-        url: "https://psoederonda.github.io/vivienda/",
-        imageUrl: "https://i.imgur.com/lG732lU.jpeg", 
-        icon: "home",
-        area: "Vivienda",
-    }
-];
 
-/**
- * Función específica para renderizar las tarjetas de Ágoras.
- * Esta función toma los datos y los convierte en el HTML de la tarjeta.
- */
-function renderAgoras(agoras, containerId) {
-    const container = document.getElementById(containerId);
-    if (!container) return; 
-
-    container.innerHTML = ''; 
-
-    agoras.forEach(agora => {
-        const card = document.createElement('div');
-        // Clase modificada para centrado y ocupar ancho completo
-        card.className = 'bg-white rounded-xl overflow-hidden campaign-card flex flex-col w-full max-w-4xl mx-auto';
-        
-        // Estructura de la tarjeta con imagen, texto y botón
-        card.innerHTML = `
-            <!-- Imagen del Ágora -->
-            <div class="h-48 overflow-hidden relative">
-                <img src="${agora.imageUrl}" alt="Imagen de Ágora: ${agora.title}" 
-                    class="w-full h-full object-cover"
-                    onerror="this.onerror=null; this.src='https://placehold.co/800x450/0056b3/ffffff?text=Ágora+Vivienda'; this.style.objectFit='contain'; this.style.padding='1rem';"
-                >
-            </div>
-            
-            <!-- Contenido del Ágora -->
-            <div class="p-6 flex flex-col flex-grow">
-                <div class="flex items-center text-color-principal mb-2">
-                    <i data-lucide="${agora.icon || 'message-square-text'}" class="w-5 h-5 mr-2"></i>
-                    <span class="text-sm font-semibold uppercase tracking-wider">${agora.area || 'Ágora'}</span>
-                </div>
-                <h3 class="text-xl font-extrabold text-gray-900 mb-3 leading-tight">${agora.title}</h3>
-                <p class="text-gray-600 mb-4 flex-grow">${agora.description}</p>
-                
-                <!-- Botón de Enlace -->
-                <a href="${agora.url}" target="_blank" 
-                   class="mt-4 inline-flex items-center justify-center color-principal text-white px-5 py-2 rounded-lg font-semibold interactive-button-pop shadow-md hover:bg-red-700 transition duration-300">
-                    Ver Debate
-                    <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
-                </a>
-            </div>
-        `;
-        container.appendChild(card);
-    });
-}
     /**
      * Alterna la visibilidad del menú móvil.
      */
